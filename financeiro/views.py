@@ -9,25 +9,26 @@ from .models import Categoria, Subcategoria, Transacao
 
 # views.py
 
-
-# views.py
-
-
 def visao_geral(request):
     year = date.today().year
-    transacoes = Transacao.objects.filter(data__year=year)
-    resumo = {}
-    for categoria in Categoria.objects.all():
-        subcategorias = Subcategoria.objects.filter(categoria=categoria)
-        resumo[categoria.nome] = {'subcategorias': subcategorias, 'meses': {}}
-        for mes in range(1, 13):
-            resumo[categoria.nome]['meses'][mes] = {
-                'total': transacoes.filter(subcategoria__categoria=categoria, data__month=mes).aggregate(Sum('montante'))['montante__sum'] or 0,
-                'subcategorias': {},
-            }
-            for transacao in transacoes.filter(subcategoria__categoria=categoria, data__month=mes):
-                if transacao.subcategoria.nome not in resumo[categoria.nome]['meses'][mes]['subcategorias']:
-                    resumo[categoria.nome]['meses'][mes]['subcategorias'][transacao.subcategoria.nome] = 0
-                resumo[categoria.nome]['meses'][mes]['subcategorias'][transacao.subcategoria.nome] += transacao.montante
     meses = list(range(1, 13))
-    return render(request, 'financeiro/visao_geral.html', {'resumo': resumo, 'meses': meses})
+    ordem_categorias = {'RC': 1, 'I': 2, 'GF': 3, 'GV': 4}  # ordem das categorias
+    categorias = sorted(Categoria.objects.all(), key=lambda x: ordem_categorias[x.nome])
+    resumo = {}
+    for categoria in categorias:
+        resumo[categoria.nome] = {'subcategorias': {}, 'total': [None]*12}
+        for subcategoria in Subcategoria.objects.filter(categoria=categoria):
+            transacoes = Transacao.objects.filter(subcategoria=subcategoria, data__year=year)
+            resumo[categoria.nome]['subcategorias'][subcategoria.nome] = [None]*12
+            for transacao in transacoes:
+                mes = transacao.data.month - 1 # os índices em Python começam em 0
+                if resumo[categoria.nome]['subcategorias'][subcategoria.nome][mes] is None:
+                    resumo[categoria.nome]['subcategorias'][subcategoria.nome][mes] = 0
+                resumo[categoria.nome]['subcategorias'][subcategoria.nome][mes] += transacao.montante
+                if resumo[categoria.nome]['total'][mes] is None:
+                    resumo[categoria.nome]['total'][mes] = 0
+                resumo[categoria.nome]['total'][mes] += transacao.montante
+    nomes_meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+    return render(request, 'financeiro/visao_geral.html', {'resumo': resumo, 'meses': nomes_meses})
+
+

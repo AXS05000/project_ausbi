@@ -12,39 +12,33 @@
 
 <table>
     <tr>
-        <th></th>
-        {% for i in meses %}
-            <th>{{ i }}</th>
+        <th>Subcategoria</th>
+        {% for nome in meses %}
+            <th>{{ nome }}</th>
         {% endfor %}
     </tr>
     {% for categoria, dados in resumo.items %}
         <tr>
-            <td colspan="13">{{ categoria }}</td>
+            <td colspan="14">{{ categoria }}</td>
         </tr>
-        {% for subcategoria in dados.subcategorias %}
+        {% for subcategoria, valores in dados.subcategorias.items %}
             <tr>
-                <td>{{ subcategoria.nome }}</td>
-                {% for mes in meses %}
-                    <td>
-                        {% if mes in dados.meses and subcategoria.nome in dados.meses[mes].subcategorias %}
-                            {{ dados.meses[mes].subcategorias[subcategoria.nome] }}
-                        {% endif %}
-                    </td>
+                <td>{{ subcategoria }}</td>
+                {% for valor in valores %}
+                    <td>{% if valor != None %}R$ {{ valor }}{% endif %}</td>
                 {% endfor %}
             </tr>
         {% endfor %}
         <tr>
             <td>Total</td>
-            {% for mes in meses %}
-                <td>
-                    {% if mes in dados.meses %}
-                        {{ dados.meses[mes].total }}
-                    {% endif %}
-                </td>
+            {% for valor in dados.total %}
+                <td>{% if valor != None %}R$ {{ valor }}{% endif %}</td>
             {% endfor %}
         </tr>
     {% endfor %}
 </table>
+
+
 
 
 
