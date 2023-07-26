@@ -1,3 +1,10 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Categoria, Subcategoria, Transacao
+
+admin.site.register(Categoria)
+
+admin.site.register(Subcategoria)
+
+admin.site.register(Transacao)
+

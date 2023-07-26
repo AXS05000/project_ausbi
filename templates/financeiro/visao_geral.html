@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumo</title>
+</head>
+<body>
+<!-- visao_geral.html -->
+
+<h1>Resumo do Ano</h1>
+
+<table>
+    <tr>
+        <th></th>
+        {% for i in meses %}
+            <th>{{ i }}</th>
+        {% endfor %}
+    </tr>
+    {% for categoria, dados in resumo.items %}
+        <tr>
+            <td colspan="13">{{ categoria }}</td>
+        </tr>
+        {% for subcategoria in dados.subcategorias %}
+            <tr>
+                <td>{{ subcategoria.nome }}</td>
+                {% for mes in meses %}
+                    <td>
+                        {% if mes in dados.meses and subcategoria.nome in dados.meses[mes].subcategorias %}
+                            {{ dados.meses[mes].subcategorias[subcategoria.nome] }}
+                        {% endif %}
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        <tr>
+            <td>Total</td>
+            {% for mes in meses %}
+                <td>
+                    {% if mes in dados.meses %}
+                        {{ dados.meses[mes].total }}
+                    {% endif %}
+                </td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+
+
+
+
+
+</body>
+</html>
