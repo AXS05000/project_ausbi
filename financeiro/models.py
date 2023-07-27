@@ -5,12 +5,12 @@ from django.db import models
 
 class Categoria(models.Model):
     NOME = (
-        ('RC', 'Receitas'),
-        ('GF', 'Gastos Fixos'),
-        ('GV', 'Gastos Variáveis'),
-        ('I', 'Investimentos'),
+        ('Receitas', 'Receitas'),
+        ('Gastos Fixos', 'Gastos Fixos'),
+        ('Gastos Variáveis', 'Gastos Variáveis'),
+        ('Investimentos', 'Investimentos'),
     )
-    nome = models.CharField(max_length=2, choices=NOME)
+    nome = models.CharField(max_length=50, choices=NOME)
 
     def __str__(self):
         return f'{self.nome}'

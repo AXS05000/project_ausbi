@@ -18,25 +18,56 @@
         {% endfor %}
     </tr>
     {% for categoria, dados in resumo.items %}
-        <tr>
-            <td colspan="14">{{ categoria }}</td>
-        </tr>
-        {% for subcategoria, valores in dados.subcategorias.items %}
+        {% if categoria != "Liquido" %}
             <tr>
-                <td>{{ subcategoria }}</td>
-                {% for valor in valores %}
-                    <td>{% if valor != None %}R$ {{ valor }}{% endif %}</td>
+                <td colspan="7">{{ categoria }}</td>
+            </tr>
+            {% for subcategoria, valores in dados.subcategorias.items %}
+                <tr>
+                    <td>{{ subcategoria }}</td>
+                    {% for valor in valores %}
+                        <td>
+                            {% if valor != 0 %}
+                                R$ {{ valor }}
+                            {% else %}
+                                R$ -
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            <tr>
+                <td>Total</td>
+                {% for valor in dados.total %}
+                    <td>
+                        {% if valor != 0 %}
+                            R$ {{ valor }}
+                        {% else %}
+                            R$ -
+                        {% endif %}
+                    </td>
                 {% endfor %}
             </tr>
-        {% endfor %}
-        <tr>
-            <td>Total</td>
-            {% for valor in dados.total %}
-                <td>{% if valor != None %}R$ {{ valor }}{% endif %}</td>
-            {% endfor %}
-        </tr>
+        {% endif %}
     {% endfor %}
+    <tr>
+        <td>Total Liquido</td>
+        {% for valor in resumo.Liquido.total %}
+            <td>
+                {% if valor != 0 %}
+                    R$ {{ valor }}
+                {% else %}
+                    R$ -
+                {% endif %}
+            </td>
+        {% endfor %}
+    </tr>
 </table>
+
+
+
+
+
 
 
 
