@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+  <h2>Transações - {{ month }}</h2>
+  <table>
+    <tr>
+      <th>Subcategoria</th>
+      <th>Data</th>
+      <th>Montante</th>
+      <th>Descrição</th>
+      <th>Ações</th>
+    </tr>
+    {% for transacao in object_list %}
+    <tr>
+      <td>{{ transacao.subcategoria.nome }}</td>
+      <td>{{ transacao.data }}</td>
+      <td>R$ {{ transacao.montante }}</td>
+      <td>{{ transacao.descricao }}</td>
+      <td>
+        <a href="{% url 'transacao-editar' transacao.id %}">Editar</a> |
+        <a href="{% url 'transacao-deletar' transacao.id %}">Deletar</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</body>
+</html>

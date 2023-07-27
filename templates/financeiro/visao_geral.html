@@ -1,68 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resumo</title>
 </head>
 <body>
-<!-- visao_geral.html -->
-
-<h1>Resumo do Ano</h1>
-
-<table>
-    <tr>
-        <th>Subcategoria</th>
-        {% for nome in meses %}
-            <th>{{ nome }}</th>
-        {% endfor %}
-    </tr>
+    <h2>Visão Geral</h2>
     {% for categoria, dados in resumo.items %}
-        {% if categoria != "Liquido" %}
-            <tr>
-                <td colspan="7">{{ categoria }}</td>
-            </tr>
-            {% for subcategoria, valores in dados.subcategorias.items %}
-                <tr>
-                    <td>{{ subcategoria }}</td>
-                    {% for valor in valores %}
-                        <td>
-                            {% if valor != 0 %}
-                                R$ {{ valor }}
-                            {% else %}
-                                R$ -
-                            {% endif %}
-                        </td>
-                    {% endfor %}
-                </tr>
-            {% endfor %}
-            <tr>
-                <td>Total</td>
-                {% for valor in dados.total %}
-                    <td>
-                        {% if valor != 0 %}
-                            R$ {{ valor }}
-                        {% else %}
-                            R$ -
-                        {% endif %}
-                    </td>
-                {% endfor %}
-            </tr>
-        {% endif %}
-    {% endfor %}
-    <tr>
-        <td>Total Liquido</td>
-        {% for valor in resumo.Liquido.total %}
-            <td>
-                {% if valor != 0 %}
-                    R$ {{ valor }}
+      <h3>{{ categoria }}</h3>
+      <table>
+        <tr>
+          <th>Subcategoria</th>
+          {% for mes in meses %}
+              <th>
+                  <a href="{% url 'transacoes-mes' forloop.counter %}">{{ mes }}</a>
+              </th>
+          {% endfor %}
+        </tr>
+        {% for subcategoria, valores in dados.subcategorias.items %}
+          <tr>
+            <td>{{ subcategoria }}</td>
+            {% for valor in valores %}
+              <td>
+                {% if valor %}
+                  R$ {{ valor }}
                 {% else %}
-                    R$ -
+                  R$ -
                 {% endif %}
-            </td>
+              </td>
+            {% endfor %}
+          </tr>
         {% endfor %}
-    </tr>
-</table>
+        <tr>
+          <td>Total</td>
+          {% for total in dados.total %}
+            <td>
+              {% if total %}
+                R$ {{ total }}
+              {% else %}
+                R$ -
+              {% endif %}
+            </td>
+          {% endfor %}
+        </tr>
+      </table>
+    {% endfor %}
 
 
 
