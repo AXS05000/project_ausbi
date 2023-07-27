@@ -17,7 +17,8 @@ class VisaoGeral(TemplateView):
         context = super().get_context_data(**kwargs)
         today = date.today()
         year, current_month = today.year, today.month
-        meses = list(range(current_month, current_month + 6))
+        # Calculate month numbers for next 6 months
+        meses = [(current_month + i - 1) % 12 + 1 for i in range(6)]
         ordem_categorias = {'Receitas': 1, 'Investimentos': 2, 'Gastos Fixos': 3, 'Gastos Variáveis': 4}  # ordem das categorias
         categorias = sorted(Categoria.objects.all(), key=lambda x: ordem_categorias[x.nome])
         resumo = {}
@@ -25,14 +26,10 @@ class VisaoGeral(TemplateView):
             resumo[categoria.nome] = {'subcategorias': {}, 'total': [0]*6}
             for subcategoria in Subcategoria.objects.filter(categoria=categoria):
                 transacoes = Transacao.objects.filter(subcategoria=subcategoria, data__year=year, data__month__in=meses)
-                resumo[categoria.nome]['subcategorias'][subcategoria.nome] = {
-                    'valores': [0]*6,
-                    'ids': [None]*6,
-                }
+                resumo[categoria.nome]['subcategorias'][subcategoria.nome] = [0]*6
                 for transacao in transacoes:
                     mes = transacao.data.month - current_month
-                    resumo[categoria.nome]['subcategorias'][subcategoria.nome]['valores'][mes] += transacao.montante
-                    resumo[categoria.nome]['subcategorias'][subcategoria.nome]['ids'][mes] = transacao.id
+                    resumo[categoria.nome]['subcategorias'][subcategoria.nome][mes] += transacao.montante
                     resumo[categoria.nome]['total'][mes] += transacao.montante
 
         # Cálculo do líquido movido para fora do loop
@@ -45,10 +42,12 @@ class VisaoGeral(TemplateView):
             resumo['Liquido']['total'][mes] = receita - (gastos_fixos + gastos_variaveis + investimentos)
 
         nomes_meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
-        nomes_meses = nomes_meses[current_month-1:current_month+5]
+        nomes_meses = [nomes_meses[mes-1] for mes in meses]
         context['resumo'] = resumo
-        context['meses'] = nomes_meses
+        context['meses'] = zip(meses, nomes_meses)  # Pair month numbers with month names
         return context
+
+
 
 
 class TransacoesMes(ListView):
@@ -63,9 +62,8 @@ class TransacoesMes(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         nomes_meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
-        context['month'] = nomes_meses[self.kwargs['mes'] - 1]
+        context['month_name'] = nomes_meses[self.kwargs['mes'] - 1]
         return context
-
 
 
 class TransacaoCreate(CreateView):

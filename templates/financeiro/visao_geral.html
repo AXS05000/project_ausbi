@@ -13,38 +13,27 @@
         <tr>
           <th>Subcategoria</th>
           {% for mes in meses %}
-              <th>
-                  <a href="{% url 'transacoes-mes' forloop.counter %}">{{ mes }}</a>
-              </th>
+            <th>
+              <a href="{% url 'transacoes-mes' mes=mes.0 %}">{{ mes.1 }}</a>
+            </th>
           {% endfor %}
         </tr>
         {% for subcategoria, valores in dados.subcategorias.items %}
           <tr>
             <td>{{ subcategoria }}</td>
             {% for valor in valores %}
-              <td>
-                {% if valor %}
-                  R$ {{ valor }}
-                {% else %}
-                  R$ -
-                {% endif %}
-              </td>
+              <td>R$ {% if valor != 0 %}{{ valor }}{% else %}-{% endif %}</td>
             {% endfor %}
           </tr>
         {% endfor %}
         <tr>
-          <td>Total</td>
-          {% for total in dados.total %}
-            <td>
-              {% if total %}
-                R$ {{ total }}
-              {% else %}
-                R$ -
-              {% endif %}
-            </td>
+          <td><b>Total</b></td>
+          {% for valor in dados.total %}
+            <td><b>R$ {% if valor != 0 %}{{ valor }}{% else %}-{% endif %}</b></td>
           {% endfor %}
         </tr>
       </table>
+      <br>
     {% endfor %}
 
 
