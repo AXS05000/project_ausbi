@@ -1,7 +1,7 @@
 # urls.py
 from django.urls import path
 
-from .views import (DashboardView, TablesView, TransacaoCreate,
+from .views import (DashboardView, DreView, TablesView, TransacaoCreate,
                     TransacaoDelete, TransacaoUpdate, TransacoesMes,
                     VisaoGeral, WalletView)
 
@@ -12,6 +12,7 @@ urlpatterns = [
     path('dashboard/', DashboardView.as_view(), name='dashboard'),
     path('wallet/', WalletView.as_view(), name='wallet'),
     path('tables/', TablesView.as_view(), name='tables'),
+    path('dre/', DreView.as_view(), name='dre'),
     path('transacao/nova/', TransacaoCreate.as_view(), name='transacao-nova'),
     path('transacao/<int:pk>/editar/', TransacaoUpdate.as_view(), name='transacao-editar'),
     path('transacao/<int:pk>/deletar/', TransacaoDelete.as_view(), name='transacao-deletar'),

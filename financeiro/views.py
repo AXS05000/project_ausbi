@@ -21,6 +21,9 @@ class TablesView(TemplateView):
 class WalletView(TemplateView):
     template_name = 'financeiro/wallet.html'
 
+class DreView(TemplateView):
+    template_name = 'financeiro/dre.html'
+
 
 
 
