@@ -542,6 +542,68 @@
           </div>
         </div>
       </div>
+      {% for categoria, dados in resumo.items %}
+      <div class="row">
+        <div class="col-12">
+          <div class="card border shadow-xs mb-4">
+            <div class="card-header border-bottom pb-0">
+              <div class="d-sm-flex align-items-center">
+                <div>
+                  <h6 class="font-weight-semibold text-lg mb-0">{{ categoria }}</h6>
+                  <p class="text-sm">See information about all members</p>
+                </div>
+              </div>
+            </div>
+            <div class="card-body px-0 py-0">
+              <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0">
+                  <thead class="bg-gray-100">
+                    <tr>
+                      <th class="text-secondary text-xs font-weight-semibold opacity-7">Subcategoria</th>
+                      {% for mes in meses %}
+                      <th class="text-center text-secondary text-xs font-weight-semibold opacity-7">{{ mes.1 }}</th>
+                      {% endfor %}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for subcategoria, valores in dados.subcategorias.items %}
+                    <tr>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center ms-1">
+                            <h6 class="mb-0 text-sm font-weight-semibold">{{ subcategoria }}</h6>
+                          </div>
+                        </div>
+                      </td>
+                      {% for valor in valores %}
+                      <td class="align-middle text-center">
+                        <span class="text-secondary text-sm font-weight-normal">R$ {% if valor != 0 %}{{ valor }}{% else %}-{% endif %}</span>
+                      </td>
+                      {% endfor %}
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center ms-1">
+                            <h6 class="mb-0 text-sm font-weight-semibold"><b>Total</b></h6>
+                          </div>
+                        </div>
+                      </td>
+                      {% for valor in dados.total %}
+                      <td class="align-middle text-center">
+                        <span class="text-secondary text-sm font-weight-normal"><b>R$ {% if valor != 0 %}{{ valor }}{% else %}-{% endif %}</b></span>
+                      </td>
+                      {% endfor %}
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
       <div class="row">
         <div class="col-12">
           <div class="card border shadow-xs mb-4">

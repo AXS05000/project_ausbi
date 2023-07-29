@@ -8,8 +8,9 @@
 <body>
     <h2>Visão Geral</h2>
     {% for categoria, dados in resumo.items %}
-      <h3>{{ categoria }}</h3>
-      <table>
+    <h3>{{ categoria }}</h3>
+    <table>
+      <thead>
         <tr>
           <th>Subcategoria</th>
           {% for mes in meses %}
@@ -18,6 +19,8 @@
             </th>
           {% endfor %}
         </tr>
+      </thead>
+      <tbody>
         {% for subcategoria, valores in dados.subcategorias.items %}
           <tr>
             <td>{{ subcategoria }}</td>
@@ -32,9 +35,11 @@
             <td><b>R$ {% if valor != 0 %}{{ valor }}{% else %}-{% endif %}</b></td>
           {% endfor %}
         </tr>
-      </table>
-      <br>
-    {% endfor %}
+      </tbody>
+    </table>
+    <br>
+  {% endfor %}
+  
 
 
 
