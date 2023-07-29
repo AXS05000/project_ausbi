@@ -10,6 +10,25 @@ from .forms import TransacaoForm
 from .models import Categoria, Subcategoria, Transacao
 
 
+class DashboardView(TemplateView):
+    template_name = 'financeiro/dashboard.html'
+
+
+class TablesView(TemplateView):
+    template_name = 'financeiro/tables.html'
+
+
+class WalletView(TemplateView):
+    template_name = 'financeiro/wallet.html'
+
+
+
+
+
+
+
+
+
 class VisaoGeral(TemplateView):
     template_name = 'financeiro/visao_geral.html'
 
